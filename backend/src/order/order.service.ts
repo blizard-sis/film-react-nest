@@ -3,13 +3,10 @@ import { CreateOrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
-  private orders: CreateOrderDto[] = [];
-
-  create(order: CreateOrderDto) {
-    this.orders.push(order);
+  create(order: CreateOrderDto): { total: number; items: CreateOrderDto[] } {
     return {
-      message: 'Заказ создан (заглушка)',
-      order,
+      total: 0,
+      items: [],
     };
   }
 }

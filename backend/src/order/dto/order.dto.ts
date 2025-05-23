@@ -1,9 +1,18 @@
 //TODO реализовать DTO для /orders
 export class CreateOrderDto {
-  filmId: string;
-  scheduleId: string;
-  seat: {
-    row: number;
-    seat: number;
-  };
+  film: string;
+  session: string;
+  daytime: string;
+  row: number;
+  seat: number;
+  price: number;
+}
+
+export class OrderResponseItemDto extends CreateOrderDto {
+  id: string;
+}
+
+export class OrderResponseDto {
+  total: number;
+  items: OrderResponseItemDto[];
 }
