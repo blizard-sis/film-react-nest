@@ -4,7 +4,7 @@ import { FilmsRepository } from '../repository/films.repository';
 import { ServerException } from '../exceptions/server.exceptions';
 import { ErrorCode } from '../exceptions/error-codes';
 import {
-  TicketDto,
+  CreateOrderDto,
   OrderResponseDto,
   OrderResponseItemDto,
 } from './dto/order.dto';
@@ -13,11 +13,10 @@ import {
 export class OrderService {
   constructor(private readonly repo: FilmsRepository) {}
 
-  async create(orders: TicketDto[]): Promise<OrderResponseDto> {
-    console.log('Creating order', orders);
+  async create(order: CreateOrderDto): Promise<OrderResponseDto> {
     const result: OrderResponseItemDto[] = [];
-    for (const order of orders) {
-      const { film, session, row, seat } = order;
+    for (const ticket of order.tickets) {
+      const { film, session, row, seat } = ticket;
       const place = `${row}:${seat}`;
 
       const filmItem = await this.repo.findById(film);
@@ -33,7 +32,7 @@ export class OrderService {
       sessionItem.taken.push(place);
 
       result.push({
-        ...order,
+        ...ticket,
         id: crypto.randomUUID(),
       });
 
