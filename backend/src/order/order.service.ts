@@ -4,7 +4,7 @@ import { FilmsRepository } from '../repository/films.repository';
 import { ServerException } from '../exceptions/server.exceptions';
 import { ErrorCode } from '../exceptions/error-codes';
 import {
-  CreateOrderDto,
+  TicketDto,
   OrderResponseDto,
   OrderResponseItemDto,
 } from './dto/order.dto';
@@ -13,9 +13,10 @@ import {
 export class OrderService {
   constructor(private readonly repo: FilmsRepository) {}
 
-  async create(orders: CreateOrderDto): Promise<OrderResponseDto> {
+  async create(orders: TicketDto[]): Promise<OrderResponseDto> {
+    console.log('Creating order', orders);
     const result: OrderResponseItemDto[] = [];
-    for (const order of orders.tickets) {
+    for (const order of orders) {
       const { film, session, row, seat } = order;
       const place = `${row}:${seat}`;
 

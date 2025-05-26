@@ -42,7 +42,6 @@ export class FilmsService {
       price: session.price,
       taken: session.taken,
     }));
-
     return {
       total: mapped.length,
       items: mapped,
