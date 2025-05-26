@@ -15,7 +15,6 @@ export class OrderService {
 
   async create(orders: CreateOrderDto[]): Promise<OrderResponseDto> {
     const result: OrderResponseItemDto[] = [];
-    console.log('Creating orders:', orders);
     for (const order of orders) {
       const { film, session, row, seat } = order;
       const place = `${row}:${seat}`;

@@ -8,12 +8,6 @@ export class CreateOrderDto {
   price: number;
 }
 
-export class CreateOrderRequestDto {
-  email: string;
-  phone: string;
-  tickets: CreateOrderDto[];
-}
-
 export class OrderResponseItemDto extends CreateOrderDto {
   id: string;
 }
