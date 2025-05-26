@@ -39,6 +39,11 @@ export class FilmsRepository {
     return result;
   }
 
+  async findById(id: string) {
+    const film = await this.FilmModel.findOne({ id });
+    return film;
+  }
+
   async findScheduleByFilmId(filmId: string) {
     const film = await this.FilmModel.findOne({ id: filmId });
     return film?.schedule ?? [];
