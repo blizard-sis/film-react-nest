@@ -1,5 +1,5 @@
 //TODO реализовать DTO для /orders
-export class CreateOrderDto {
+export class TicketDto {
   film: string;
   session: string;
   daytime: string;
@@ -8,7 +8,13 @@ export class CreateOrderDto {
   price: number;
 }
 
-export class OrderResponseItemDto extends CreateOrderDto {
+export class CreateOrderDto {
+  email: string;
+  phone: string;
+  tickets: TicketDto[];
+}
+
+export class OrderResponseItemDto extends TicketDto {
   id: string;
 }
 

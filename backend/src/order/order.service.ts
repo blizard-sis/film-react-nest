@@ -13,9 +13,9 @@ import {
 export class OrderService {
   constructor(private readonly repo: FilmsRepository) {}
 
-  async create(orders: CreateOrderDto[]): Promise<OrderResponseDto> {
+  async create(orders: CreateOrderDto): Promise<OrderResponseDto> {
     const result: OrderResponseItemDto[] = [];
-    for (const order of orders) {
+    for (const order of orders.tickets) {
       const { film, session, row, seat } = order;
       const place = `${row}:${seat}`;
 
