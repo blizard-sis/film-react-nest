@@ -1,7 +1,30 @@
-import mongoose, { Mongoose, Schema } from 'mongoose';
+import mongoose, { Mongoose, Schema, Document } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
 
-const CalendarSchema = new Schema({
+interface Session {
+  id: string;
+  daytime: string;
+  hall: string;
+  rows: number;
+  seats: number;
+  price: number;
+  taken: string[];
+}
+
+interface FilmDocument extends Document {
+  id: string;
+  rating: number;
+  director: string;
+  tags: string[];
+  title: string;
+  about: string;
+  description: string;
+  image: string;
+  cover: string;
+  schedule: Session[];
+}
+
+const SessionSchema = new Schema<Session>({
   id: String,
   daytime: String,
   hall: String,
@@ -11,7 +34,7 @@ const CalendarSchema = new Schema({
   taken: [String],
 });
 
-const FilmSchema = new Schema({
+const FilmSchema = new Schema<FilmDocument>({
   id: String,
   rating: Number,
   director: String,
@@ -21,27 +44,25 @@ const FilmSchema = new Schema({
   description: String,
   image: String,
   cover: String,
-  schedule: [CalendarSchema],
+  schedule: [SessionSchema],
 });
 
 @Injectable()
 export class FilmsRepository {
-  private FilmModel: mongoose.Model<any>;
+  private FilmModel: mongoose.Model<FilmDocument>;
 
   constructor(
     @Inject('MONGO_CONNECTION') private readonly connection: Mongoose,
   ) {
-    this.FilmModel = this.connection.model('Film', FilmSchema);
+    this.FilmModel = this.connection.model<FilmDocument>('Film', FilmSchema);
   }
 
   async findAll() {
-    const result = await this.FilmModel.find();
-    return result;
+    return this.FilmModel.find();
   }
 
   async findById(id: string) {
-    const film = await this.FilmModel.findOne({ id });
-    return film;
+    return this.FilmModel.findOne({ id });
   }
 
   async findScheduleByFilmId(filmId: string) {
