@@ -13,15 +13,15 @@ export class PgFilmsRepository {
     private scheduleRepo: Repository<Schedule>,
   ) {}
 
-  async findAll(): Promise<Film[]> {
-    return this.filmRepo.find({ relations: ['schedule'] });
+  async findAll() {
+    return this.filmRepo.find();
   }
 
-  async findById(id: string): Promise<Film | null> {
-    return this.filmRepo.findOne({ where: { id }, relations: ['schedule'] });
+  async findById(id: string) {
+    return this.filmRepo.findOne({ where: { id } });
   }
 
-  async findScheduleByFilmId(id: string): Promise<Schedule[]> {
+  async findScheduleByFilmId(id: string) {
     const film = await this.findById(id);
     return film?.schedule ?? [];
   }
