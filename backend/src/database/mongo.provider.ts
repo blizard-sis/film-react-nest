@@ -4,7 +4,7 @@ import { AppConfig } from '../app.config.provider';
 export const mongoConnectionProvider = {
   provide: 'MONGO_CONNECTION',
   useFactory: async (config: AppConfig): Promise<Mongoose> => {
-    const conn = await mongoose.connect(config.database.url);
+    const conn = await mongoose.connect(config.database.mongodbUrl);
     return conn;
   },
   inject: ['CONFIG'],
