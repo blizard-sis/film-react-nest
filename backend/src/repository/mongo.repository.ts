@@ -48,7 +48,7 @@ const FilmSchema = new Schema<FilmDocument>({
 });
 
 @Injectable()
-export class FilmsRepository {
+export class MongoRepository {
   private FilmModel: mongoose.Model<FilmDocument>;
 
   constructor(
