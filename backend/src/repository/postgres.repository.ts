@@ -5,7 +5,7 @@ import { Film } from '../films/film.entity';
 import { Schedule } from '../schedule/schedule.entity';
 
 @Injectable()
-export class PgFilmsRepository {
+export class PostgresRepository {
   constructor(
     @InjectRepository(Film)
     private filmRepo: Repository<Film>,
@@ -18,11 +18,22 @@ export class PgFilmsRepository {
   }
 
   async findById(id: string) {
-    return this.filmRepo.findOne({ where: { id } });
+    return this.filmRepo.findOne({
+      where: { id },
+      relations: ['schedule'],
+    });
   }
 
   async findScheduleByFilmId(id: string) {
     const film = await this.findById(id);
     return film?.schedule ?? [];
+  }
+
+  async saveFilm(film: Film): Promise<Film> {
+    return this.filmRepo.save(film);
+  }
+
+  async saveSchedule(session: Schedule): Promise<Schedule> {
+    return this.scheduleRepo.save(session);
   }
 }

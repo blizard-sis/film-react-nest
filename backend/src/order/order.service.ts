@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { MongoRepository } from '../repository/mongo.repository';
+import { PostgresRepository } from '../repository/postgres.repository';
 import { ServerException } from '../exceptions/server.exceptions';
 import { ErrorCode } from '../exceptions/error-codes';
 import {
@@ -11,7 +12,7 @@ import {
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly repo: MongoRepository) {}
+  constructor(private readonly repo: PostgresRepository) {}
 
   async create(order: CreateOrderDto): Promise<OrderResponseDto> {
     const result: OrderResponseItemDto[] = [];
@@ -29,14 +30,14 @@ export class OrderService {
         throw new ServerException(ErrorCode.SeatAlreadyTaken);
       }
 
-      sessionItem.taken.push(place);
+      //sessionItem.taken.push(place);
 
       result.push({
         ...ticket,
         id: crypto.randomUUID(),
       });
 
-      await filmItem.save();
+      //await filmItem.save();
     }
 
     return {

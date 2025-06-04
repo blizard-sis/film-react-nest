@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 import { MongoRepository } from '../repository/mongo.repository';
+import { PostgresRepository } from '../repository/postgres.repository';
 import { FilmDto, ScheduleDto } from './dto/films.dto';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly repo: MongoRepository) {}
+  constructor(private readonly repo: PostgresRepository) {}
 
   async getAllFilms(): Promise<{ total: number; items: FilmDto[] }> {
     const films = await this.repo.findAll();
@@ -14,7 +15,7 @@ export class FilmsService {
       id: film.id,
       rating: film.rating,
       director: film.director,
-      tags: film.tags,
+      tags: film.tags.split(','),
       title: film.title,
       about: film.about,
       description: film.description,
@@ -36,11 +37,11 @@ export class FilmsService {
     const mapped: ScheduleDto[] = sessions.map((session) => ({
       id: session.id,
       daytime: session.daytime,
-      hall: session.hall,
+      hall: session.hall.toString(),
       rows: session.rows,
       seats: session.seats,
       price: session.price,
-      taken: session.taken,
+      taken: session.taken.split(','),
     }));
     return {
       total: mapped.length,
