@@ -13,8 +13,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Film } from '../films/film.entity';
-import { Schedule } from '../schedule/schedule.entity';
+import { FilmEntity } from '../films/film.entity';
+import { ScheduleEntity } from '../schedule/schedule.entity';
 
 @Module({
   imports: [
@@ -28,11 +28,11 @@ import { Schedule } from '../schedule/schedule.entity';
         username: config.get('DATABASE_USERNAME'),
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_NAME'),
-        entities: [Film, Schedule],
-        synchronize: false, 
+        entities: [FilmEntity, ScheduleEntity],
+        synchronize: false,
       }),
     }),
-    TypeOrmModule.forFeature([Film, Schedule]),
+    TypeOrmModule.forFeature([FilmEntity, ScheduleEntity]),
   ],
   exports: [TypeOrmModule],
 })

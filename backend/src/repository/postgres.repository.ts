@@ -1,16 +1,16 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Film } from '../films/film.entity';
-import { Schedule } from '../schedule/schedule.entity';
+import { FilmEntity } from '../films/film.entity';
+import { ScheduleEntity } from '../schedule/schedule.entity';
 
 @Injectable()
 export class PostgresRepository {
   constructor(
-    @InjectRepository(Film)
-    private filmRepo: Repository<Film>,
-    @InjectRepository(Schedule)
-    private scheduleRepo: Repository<Schedule>,
+    @InjectRepository(FilmEntity)
+    private filmRepo: Repository<FilmEntity>,
+    @InjectRepository(ScheduleEntity)
+    private scheduleRepo: Repository<ScheduleEntity>,
   ) {}
 
   async findAll() {
@@ -29,11 +29,11 @@ export class PostgresRepository {
     return film?.schedule ?? [];
   }
 
-  async saveFilm(film: Film): Promise<Film> {
+  async saveFilm(film: FilmEntity): Promise<FilmEntity> {
     return this.filmRepo.save(film);
   }
 
-  async saveSchedule(session: Schedule): Promise<Schedule> {
+  async saveSchedule(session: ScheduleEntity): Promise<ScheduleEntity> {
     return this.scheduleRepo.save(session);
   }
 }
