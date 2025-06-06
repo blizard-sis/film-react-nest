@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 import { MongoRepository } from '../repository/mongo.repository';
 import { PostgresRepository } from '../repository/postgres.repository';
@@ -12,7 +12,10 @@ import {
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly repo: PostgresRepository) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY')
+    private readonly repo: MongoRepository | PostgresRepository,
+  ) {}
 
   async create(order: CreateOrderDto): Promise<OrderResponseDto> {
     const result: OrderResponseItemDto[] = [];
@@ -30,14 +33,14 @@ export class OrderService {
         throw new ServerException(ErrorCode.SeatAlreadyTaken);
       }
 
-      //sessionItem.taken.push(place);
+      sessionItem.taken.push(place);
 
       result.push({
         ...ticket,
         id: crypto.randomUUID(),
       });
 
-      //await filmItem.save();
+      await this.repo.saveFilm(filmItem);
     }
 
     return {

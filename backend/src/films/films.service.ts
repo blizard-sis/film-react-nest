@@ -1,51 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 import { MongoRepository } from '../repository/mongo.repository';
 import { PostgresRepository } from '../repository/postgres.repository';
+
 import { FilmDto, ScheduleDto } from './dto/films.dto';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly repo: PostgresRepository) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY')
+    private readonly repo: MongoRepository | PostgresRepository,
+  ) {}
 
   async getAllFilms(): Promise<{ total: number; items: FilmDto[] }> {
-    const films = await this.repo.findAll();
-
-    const mapped: FilmDto[] = films.map((film) => ({
-      id: film.id,
-      rating: film.rating,
-      director: film.director,
-      tags: film.tags.split(','),
-      title: film.title,
-      about: film.about,
-      description: film.description,
-      image: film.image,
-      cover: film.cover,
-    }));
-
+    const items = await this.repo.findAll();
     return {
-      total: mapped.length,
-      items: mapped,
+      total: items.length,
+      items,
     };
   }
 
   async getFilmSchedule(
     id: string,
   ): Promise<{ total: number; items: ScheduleDto[] }> {
-    const sessions = await this.repo.findScheduleByFilmId(id);
-
-    const mapped: ScheduleDto[] = sessions.map((session) => ({
-      id: session.id,
-      daytime: session.daytime,
-      hall: session.hall.toString(),
-      rows: session.rows,
-      seats: session.seats,
-      price: session.price,
-      taken: session.taken.split(','),
-    }));
+    const items = await this.repo.findScheduleByFilmId(id);
     return {
-      total: mapped.length,
-      items: mapped,
+      total: items.length,
+      items,
     };
   }
 }
