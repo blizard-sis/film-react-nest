@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
-import { FilmsRepository } from '../repository/films.repository';
+import { MongoRepository } from '../repository/mongo.repository';
+import { PostgresRepository } from '../repository/postgres.repository';
 import { ServerException } from '../exceptions/server.exceptions';
 import { ErrorCode } from '../exceptions/error-codes';
 import {
@@ -11,7 +12,10 @@ import {
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly repo: FilmsRepository) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY')
+    private readonly repo: MongoRepository | PostgresRepository,
+  ) {}
 
   async create(order: CreateOrderDto): Promise<OrderResponseDto> {
     const result: OrderResponseItemDto[] = [];
@@ -36,7 +40,7 @@ export class OrderService {
         id: crypto.randomUUID(),
       });
 
-      await filmItem.save();
+      await this.repo.saveFilm(filmItem);
     }
 
     return {

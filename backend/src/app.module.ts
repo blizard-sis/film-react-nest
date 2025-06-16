@@ -14,10 +14,9 @@ import { DatabaseModule } from './database/database.module';
       isGlobal: true,
       cache: true,
     }),
-    DatabaseModule,
+    DatabaseModule.register(),
     FilmsModule,
     OrderModule,
-    // @todo: Добавьте раздачу статических файлов из public
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha',

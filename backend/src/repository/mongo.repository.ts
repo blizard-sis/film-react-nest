@@ -1,6 +1,10 @@
 import mongoose, { Mongoose, Schema, Document } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
 
+import { FilmDto, ScheduleDto } from '../films/dto/films.dto';
+
+import { IFilmsRepository } from './films.repository.interface';
+
 interface Session {
   id: string;
   daytime: string;
@@ -48,7 +52,7 @@ const FilmSchema = new Schema<FilmDocument>({
 });
 
 @Injectable()
-export class FilmsRepository {
+export class MongoRepository implements IFilmsRepository {
   private FilmModel: mongoose.Model<FilmDocument>;
 
   constructor(
@@ -68,5 +72,14 @@ export class FilmsRepository {
   async findScheduleByFilmId(filmId: string) {
     const film = await this.FilmModel.findOne({ id: filmId });
     return film?.schedule ?? [];
+  }
+
+  async saveFilm(filmDto: FilmDto & { schedule: ScheduleDto[] }) {
+    const existing = await this.FilmModel.findOne({ id: filmDto.id });
+    if (existing) {
+      await existing.overwrite(filmDto).save();
+    } else {
+      throw new Error('Film not found');
+    }
   }
 }
