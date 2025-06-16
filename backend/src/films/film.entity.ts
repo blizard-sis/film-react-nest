@@ -6,28 +6,28 @@ export class FilmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'double precision', default: 0, nullable: false })
   rating: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   director: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   tags: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   image: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   cover: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   title: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: false })
   about: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: false })
   description: string;
 
   @OneToMany(() => ScheduleEntity, (schedule) => schedule.film, {
