@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { Logger } from '@nestjs/common';
 import 'dotenv/config';
+
+import { AppModule } from './app.module';
 import { DevLogger } from './logger/dev.logger';
 import { JsonLogger } from './logger/json.logger';
 import { TskvLogger } from './logger/tskv.logger';
@@ -22,6 +24,9 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/afisha');
   app.enableCors();
+
+  const logger = new Logger('Main');
+  logger.log(`🚀 App starting on port ${PORT} with logger: ${LOGGER}`);
   await app.listen(PORT);
 }
 bootstrap();
