@@ -1,24 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
+import { mockOrderDto } from '../../test/fixtures/films.mock';
+
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 
 describe('OrderController', () => {
   let controller: OrderController;
 
-  describe('OrderController defined', () => {
+  const serviceMock = {
+    create: jest.fn(),
+  };
+
+  describe('OrderController', () => {
     beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
         controllers: [OrderController],
-        providers: [
-          OrderService,
-          {
-            provide: 'FILMS_REPOSITORY',
-            useValue: {
-              findById: jest.fn(),
-              saveFilm: jest.fn(),
-            },
-          },
-        ],
+        providers: [{ provide: OrderService, useValue: serviceMock }],
       }).compile();
 
       controller = module.get<OrderController>(OrderController);
@@ -26,6 +24,19 @@ describe('OrderController', () => {
 
     it('should be defined', () => {
       expect(controller).toBeDefined();
+    });
+
+    it('POST /order', async () => {
+      const success = {
+        total: 1,
+        items: [{ ...mockOrderDto.tickets[0], id: 'uuid' }],
+      };
+      serviceMock.create.mockResolvedValue(success);
+
+      const result = await controller.createOrder(mockOrderDto);
+
+      expect(serviceMock.create).toHaveBeenCalledWith(mockOrderDto);
+      expect(result).toEqual(success);
     });
   });
 });
