@@ -88,20 +88,16 @@ jobs:
           script: |
             set -e
             cd /opt/film
-
-            cat > .env <<EOF
-            PORT=3000
-            LOGGER=dev
-            DATABASE_DRIVER=postgres
-
-            DATABASE_HOST=postgres
-            DATABASE_PORT=5432
-            DATABASE_NAME=${{ secrets.DATABASE_NAME }}
-            DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
-            DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            EOF
+            echo 'PORT=3000' > .env
+            echo 'NODE_ENV=production' >> .env
+            echo 'LOGGER=dev' >> .env
+            echo 'DATABASE_DRIVER=postgres' >> .env
+            echo 'DATABASE_HOST=postgres' >> .env
+            echo 'DATABASE_PORT=5432' >> .env
+            echo 'DATABASE_NAME=${{ secrets.DATABASE_NAME }}' >> .env
+            echo 'DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}' >> .env
+            echo 'DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}' >> .env
+            echo 'VITE_API_URL=${{ secrets.VITE_API_URL }}' >> .env
 
             docker compose pull
             docker compose up -d --remove-orphans
