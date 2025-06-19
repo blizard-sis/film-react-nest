@@ -12,6 +12,8 @@
 - Контейнеризация через Docker и Docker Compose
 - CI/CD: сборка образов через GitHub Actions, публикация в Docker Hub, деплой на удалённый хост
 
+Текущий экземляр работает на [practicum.cod.phystech.edu](https://practicum.cod.phystech.edu/).
+
 ---
 
 ## 🚀 Локальный запуск
