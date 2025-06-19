@@ -2,7 +2,7 @@ name: Build images
 
 on:
   push:
-    branches: [ "review-3" ]
+    branches: [ "review-3", "main" ]
   workflow_dispatch:
 
 env:
