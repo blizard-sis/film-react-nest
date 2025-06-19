@@ -1,7 +1,9 @@
 version: "3.9"
+
 volumes:
   pg-data:
   backend-static:
+
 networks:
   app-net:
 
@@ -18,16 +20,18 @@ services:
     networks: [app-net]
 
   backend:
-    image: blizardsis/film-react-nest-backend:latest
+    build: ../backend
     restart: unless-stopped
     env_file: .env
     depends_on: [postgres]
     networks: [app-net]
     volumes:
       - backend-static:/app/public:ro
-
   frontend:
-    image: blizardsis/film-react-nest-frontend:latest
+    build:
+      context: ../frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL}
     restart: unless-stopped
     networks: [app-net]
     ports:
