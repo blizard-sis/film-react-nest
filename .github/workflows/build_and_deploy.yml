@@ -11,6 +11,34 @@ env:
   IMAGE_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/film-react-nest-frontend
 
 jobs:
+  lint-and-test:
+    name:  🐞 Lint and test backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Run linter
+        run: |
+          cd backend
+          npm run lint
+
+      - name: Run tests
+        run: |
+          cd backend
+          npm run test
+
   build:
     name: 🛠️ Build and push Docker images
     runs-on: ubuntu-latest
